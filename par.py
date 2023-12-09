@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup as BS
-import pandas as pd
+
 
 source = requests.get('https://www.bayut.com/index/sale-prices-apartments-dubai.html').text
 soup = BS(source, 'lxml')
@@ -11,6 +11,7 @@ titles_count = 0
 #счетчик для распределения колонок
 columns_count = 0
 
+
 hotels = {}
 for item in data:
     if titles_count > 5:
@@ -19,6 +20,12 @@ for item in data:
         item_text = item_text.replace('  ', '')
 
         if columns_count == 0:
+            #удаляем пробелы в конце, если такие имеются
+            while True:
+                if item_text[-1] == " ":
+                    item_text = item_text[:-1]
+                else:
+                    break
             last_name_hotel = item_text
             hotels[last_name_hotel] = {}
             columns_count += 1
@@ -49,4 +56,4 @@ for item in data:
 
 for key, value in hotels.items():
     print(key, value)
-    print("-" * 70)
+    print("-" * 70) 
